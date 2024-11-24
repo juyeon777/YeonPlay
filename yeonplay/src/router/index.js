@@ -1,25 +1,24 @@
+import Vue from 'vue';
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+//import VueRouter from 'vue-router';
+import MovieList from '@/components/MovieList.vue'
+import HomeView from '../views/HomeView.vue'; // 메인 페이지
+import MovieDetailView from '../views/MovieDetailView.vue'; // 상세 페이지
+import AboutView from '../views/AboutView.vue'; // About 페이지
+
+
+Vue.use(VueRouter);
 
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: HomeView
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
-]
+  { path: '/', name: 'Home', component: HomeView }, // 메인 페이지
+  { path: '/movie/:id', name: 'MovieDetail', component: MovieDetailView }, // 상세 페이지
+  { path: '/about', name: 'About', component: AboutView }, // About 페이지 추가
+];
 
-const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
-})
-
-export default router
+/*const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes,
+});
+*/
+export default router;
