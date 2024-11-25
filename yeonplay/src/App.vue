@@ -6,12 +6,15 @@
         <router-link to="/">Popular Movies</router-link>
         <router-link to="/now-playing">Now Playing</router-link>
         <router-link to="/genres">장르별 영화</router-link>
-
+        <router-link to="/wishlist">내가 찜한 콘텐츠</router-link> 
+        
         <!-- 돋보기 아이콘 -->
         <div class="search-icon" @click="toggleSearch">🔍</div>
 
         <!-- 로그인 상태에 따른 UI -->
         <div class="user-info">
+
+
           <span v-if="isLoggedIn">{{ loggedInUser }}님</span>
           <router-link v-else to="/signin" class="login-link">로그인</router-link>
           <button v-if="isLoggedIn" @click="logout" class="logout-btn">로그아웃</button>
