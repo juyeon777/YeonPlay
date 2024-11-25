@@ -5,7 +5,6 @@
       <nav>
         <router-link to="/">Popular Movies</router-link>
         <router-link to="/now-playing">Now Playing</router-link>
-        <router-link to="/search">Search Movies</router-link>
         <router-link to="/genres">장르별 영화</router-link>
         <!-- 돋보기 아이콘 추가 -->
         <div class="search-icon" @click="toggleSearch">
@@ -45,14 +44,15 @@ export default {
       this.showSearchInput = !this.showSearchInput; // 검색 입력 필드 보이기/숨기기
     },
     performSearch() {
-    if (this.searchQuery.trim()) {
-      console.log('Performing search with query:', this.searchQuery); // 디버깅
-      this.$router.push({ name: 'SearchMovies', query: { q: this.searchQuery } });
-      this.showSearchInput = false;
-      this.searchQuery = '';
-  }
-},
-
+      if (this.searchQuery.trim()) {
+        console.log('Performing search with query:', this.searchQuery); // 디버깅
+        this.$router.push({ name: 'SearchMovies', query: { q: this.searchQuery } });
+        this.showSearchInput = false; // 검색 입력 필드 숨기기
+        this.searchQuery = ''; // 검색어 초기화
+      } else {
+        alert('검색어를 입력해주세요.');
+      }
+    },
   },
 };
 </script>

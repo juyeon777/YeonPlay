@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Search Movies</h1>
+    <h1>Search Results</h1>
 
     <!-- 로딩 상태 -->
     <div v-if="loading" class="loading">로딩 중...</div>
@@ -97,42 +97,6 @@ export default {
 </script>
 
 <style scoped>
-.search-container {
-  margin: 20px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
-
-.search-container input {
-  width: 300px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.search-container button {
-  padding: 10px 20px;
-  border: none;
-  background-color: #42b983;
-  color: white;
-  font-size: 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.search-container button:hover {
-  background-color: #369d6c;
-}
-
-.loading {
-  text-align: center;
-  font-size: 1.2rem;
-  color: #555;
-}
-
 .movie-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
