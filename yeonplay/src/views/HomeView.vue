@@ -1,27 +1,37 @@
 <template>
   <div>
     <h1>Popular Movies</h1>
-    <MovieList :movies="movies" />
+    <div v-if="loading">Loading...</div>
+    <div v-else-if="movies.length">
+      <MovieList :movies="movies" />
+    </div>
+    <div v-else>
+      <p>No movies found. Try again later.</p>
+    </div>
   </div>
 </template>
 
 <script>
-import tmdb from '@/api/tmdb'; // TMDB API 가져오기
-//import MovieList from '@/components/MovieList.vue'; // MovieList 컴포넌트 가져오기
+import tmdb from '@/api/tmdb';
+import MovieList from '@/components/MovieList.vue';
 
 export default {
+  components: { MovieList },
   data() {
     return {
-      movies: [], // 영화 데이터를 저장할 배열
+      movies: [],
+      loading: true,
     };
   },
   async created() {
     try {
-      const response = await tmdb.get('/movie/popular'); // TMDB API 호출
-      this.movies = response.data.results; // 응답 데이터를 movies에 저장
+      const response = await tmdb.get('/movie/popular');
+      this.movies = response.data.results;
     } catch (error) {
-      console.error('Failed to fetch popular movies:', error); // 에러 로그 출력
-      alert('Failed to load popular movies. Please try again later.'); // 사용자 알림
+      console.error('Failed to fetch popular movies:', error);
+      alert('Failed to load popular movies. Please try again later.');
+    } finally {
+      this.loading = false;
     }
   },
 };
