@@ -6,11 +6,18 @@
         <router-link to="/">Popular Movies</router-link>
         <router-link to="/now-playing">Now Playing</router-link>
         <router-link to="/genres">장르별 영화</router-link>
-        <!-- 돋보기 아이콘 추가 -->
-        <div class="search-icon" @click="toggleSearch">
-          🔍
+
+        <!-- 돋보기 아이콘 -->
+        <div class="search-icon" @click="toggleSearch">🔍</div>
+
+        <!-- 로그인 상태에 따른 UI -->
+        <div class="user-info">
+          <span v-if="isLoggedIn">{{ loggedInUser }}님</span>
+          <router-link v-else to="/signin" class="login-link">로그인</router-link>
+          <button v-if="isLoggedIn" @click="logout" class="logout-btn">로그아웃</button>
         </div>
       </nav>
+
       <!-- 검색 필드 -->
       <div v-if="showSearchInput" class="search-container">
         <input
@@ -37,6 +44,8 @@ export default {
     return {
       showSearchInput: false, // 검색 입력 필드 표시 여부
       searchQuery: '', // 검색어
+      isLoggedIn: false, // 로그인 상태
+      loggedInUser: '', // 로그인된 사용자 닉네임
     };
   },
   methods: {
@@ -53,6 +62,26 @@ export default {
         alert('검색어를 입력해주세요.');
       }
     },
+    logout() {
+      // 로그아웃 처리
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('loggedInUser');
+      this.isLoggedIn = false;
+      this.loggedInUser = '';
+      this.$router.push('/signin'); // 로그인 페이지로 이동
+    },
+    checkLoginStatus() {
+      // 로컬 스토리지에서 로그인 상태 확인
+      const isLoggedIn = localStorage.getItem('isLoggedIn');
+      const loggedInUser = localStorage.getItem('loggedInUser');
+      if (isLoggedIn === 'true' && loggedInUser) {
+        this.isLoggedIn = true;
+        this.loggedInUser = loggedInUser;
+      }
+    },
+  },
+  created() {
+    this.checkLoginStatus(); // 컴포넌트 생성 시 로그인 상태 확인
   },
 };
 </script>
@@ -107,9 +136,38 @@ header nav a.router-link-exact-active {
   text-decoration: underline;
 }
 
+/* 로그인 상태 표시 스타일 */
+.user-info {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+}
+
+.user-info span {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+/* 로그아웃 버튼 스타일 */
+.logout-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  border-radius: 5px;
+}
+
+.logout-btn:hover {
+  background-color: #c0392b;
+}
+
 /* 돋보기 아이콘 스타일 */
 .search-icon {
-  margin-left: auto; /* 오른쪽으로 배치 */
+  margin-left: 20px;
   font-size: 1.5rem;
   cursor: pointer;
   color: white;
@@ -168,5 +226,9 @@ footer {
   bottom: 0;
   width: 100%;
   font-size: 0.9rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 </style>
