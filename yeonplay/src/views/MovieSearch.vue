@@ -2,13 +2,35 @@
   <div>
     <h1>Search Results</h1>
 
-    <!-- 로딩 상태 -->
-    <div v-if="loading" class="loading">로딩 중...</div>
+    <!-- 필터링 UI -->
+    <div class="filter-container">
+      <select v-model="selectedGenre" @change="filterMovies">
+        <option value="">모든 장르</option>
+        <option v-for="genre in genres" :key="genre.id" :value="genre.id">
+          {{ genre.name }}
+        </option>
+      </select>
 
-    <!-- 검색 결과 -->
-    <div v-else-if="movies.length" class="movie-grid">
+      <select v-model="selectedRating" @change="filterMovies">
+        <option value="">모든 평점</option>
+        <option value="8">8점 이상</option>
+        <option value="7">7점 이상</option>
+        <option value="6">6점 이상</option>
+      </select>
+
+      <select v-model="sortOption" @change="sortMovies">
+        <option value="popularity">인기순</option>
+        <option value="release_date">최신 개봉일</option>
+        <option value="vote_average">평점순</option>
+      </select>
+
+      <button @click="resetFilters">초기화</button>
+    </div>
+
+    <!-- 결과 표시 -->
+    <div class="movie-grid">
       <div
-        v-for="movie in movies"
+        v-for="movie in filteredMovies"
         :key="movie.id"
         class="movie-item"
       >
@@ -23,15 +45,11 @@
       </div>
     </div>
 
-    <!-- 검색 결과 없음 -->
-    <div v-else-if="!movies.length && !loading && query">
-      <p>"{{ query }}"에 대한 검색 결과가 없습니다.</p>
-    </div>
+    <!-- 로딩 상태 -->
+    <div v-if="loading" class="loading">로딩 중...</div>
 
-    <!-- 검색어가 비어 있을 때 -->
-    <div v-else>
-      <p>검색어를 입력해주세요.</p>
-    </div>
+    <!-- 무한 스크롤 감지 요소 -->
+    <div ref="observer" class="scroll-observer"></div>
   </div>
 </template>
 
@@ -39,59 +57,82 @@
 import tmdb from '@/api/tmdb';
 
 export default {
-  name: 'MovieSearch',
   data() {
     return {
-      query: '', // 검색어
-      movies: [], // 검색 결과
+      movies: [], // 전체 영화 목록
+      filteredMovies: [], // 필터링된 영화 목록
+      genres: [], // 장르 데이터
+      selectedGenre: '', // 선택된 장르
+      selectedRating: '', // 선택된 평점
+      sortOption: 'popularity', // 정렬 기준
+      page: 1, // 현재 페이지
+      totalPages: null, // 전체 페이지 수
       loading: false, // 로딩 상태
     };
   },
-  watch: {
-    // URL 쿼리 파라미터 변경 시 검색 실행
-    '$route.query.q': {
-      immediate: true,
-      handler(newQuery) {
-        console.log('Route query parameter:', newQuery); // 쿼리 파라미터 확인
-        if (newQuery) {
-          this.query = newQuery; // 검색어 동기화
-          this.searchMovies();
-        } else {
-          this.movies = []; // 검색어가 비었을 때 결과 초기화
-        }
-      },
-    },
-  },
   methods: {
-    async searchMovies() {
-      if (!this.query.trim()) {
-        console.log('Empty search query');
-        this.movies = [];
-        return;
-      }
+    async fetchGenres() {
+      const response = await tmdb.get('/genre/movie/list', { params: { language: 'ko-KR' } });
+      this.genres = response.data.genres;
+    },
+    async fetchMovies() {
+      if (this.loading || (this.totalPages && this.page > this.totalPages)) return;
 
-      // 로딩 시작
       this.loading = true;
-      console.log(`Searching for: ${this.query}`);
-      console.log('API URL:', `https://api.themoviedb.org/3/search/movie?query=${this.query}&language=ko-KR`);
-
       try {
         const response = await tmdb.get('/search/movie', {
           params: {
-            query: this.query,
+            query: this.$route.query.q || '',
+            page: this.page,
             language: 'ko-KR',
           },
         });
-
-        this.movies = response.data.results; // 영화 데이터 업데이트
-        console.log('Search Results:', this.movies);
+        const { results, total_pages } = response.data;
+        this.movies.push(...results);
+        this.filteredMovies = [...this.movies];
+        this.totalPages = total_pages;
       } catch (error) {
-        console.error('Failed to fetch search results:', error);
-        alert('영화 검색에 실패했습니다. 다시 시도해주세요.');
+        console.error('Error fetching movies:', error);
       } finally {
-        this.loading = false; // 로딩 종료
+        this.loading = false;
       }
     },
+    filterMovies() {
+      this.filteredMovies = this.movies.filter(movie => {
+        const matchesGenre = this.selectedGenre ? movie.genre_ids.includes(parseInt(this.selectedGenre)) : true;
+        const matchesRating = this.selectedRating ? movie.vote_average >= parseFloat(this.selectedRating) : true;
+        return matchesGenre && matchesRating;
+      });
+    },
+    sortMovies() {
+      this.filteredMovies.sort((a, b) => {
+        if (this.sortOption === 'popularity') return b.popularity - a.popularity;
+        if (this.sortOption === 'release_date') return new Date(b.release_date) - new Date(a.release_date);
+        if (this.sortOption === 'vote_average') return b.vote_average - a.vote_average;
+      });
+    },
+    resetFilters() {
+      this.selectedGenre = '';
+      this.selectedRating = '';
+      this.sortOption = 'popularity';
+      this.filteredMovies = [...this.movies];
+    },
+    observeScroll() {
+      const observer = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
+          this.page++;
+          this.fetchMovies();
+        }
+      });
+      observer.observe(this.$refs.observer);
+    },
+  },
+  created() {
+    this.fetchGenres();
+    this.fetchMovies();
+  },
+  mounted() {
+    this.observeScroll();
   },
 };
 </script>
@@ -120,5 +161,21 @@ export default {
 .movie-item p {
   font-size: 0.9rem;
   color: #666;
+}
+
+.filter-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.loading {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
+
+.scroll-observer {
+  height: 1px;
 }
 </style>

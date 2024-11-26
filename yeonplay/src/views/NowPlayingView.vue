@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Now Playing Movies</h1>
+    <h1>현재 상영 중인 영화</h1>
     <div v-if="loading" class="loading">Loading...</div>
     <div v-else-if="movies.length" class="movie-grid">
       <div v-for="movie in movies" :key="movie.id" class="movie-item">

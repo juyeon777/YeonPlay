@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'; // Vue 3용 라우터 가져오기
-import HomeView from '../views/HomeView.vue'; // 메인 페이지
+import PopularMovies from '../views/PopularMovies.vue'; // 메인 페이지
 import MovieDetailView from '../views/MovieDetailView.vue'; // 상세 페이지
 import AboutView from '../views/AboutView.vue'; // About 페이지
 import MovieList from '../components/MovieList.vue';
@@ -15,7 +15,7 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: HomeView,
+    component: PopularMovies,
     meta: { requiresAuth: true }, // 보호된 경로
   },
   {
