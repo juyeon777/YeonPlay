@@ -7,6 +7,8 @@ import MovieSearch from '../views/MovieSearch.vue'; // MovieSearch 임포트 추
 import GenreFilterView from '../views/GenreFilterView.vue'; // 장르별 필터 추가
 import SignInView from '../views/SignIn.vue'; // 로그인/회원가입 페이지 추가
 import WishlistView from '../views/WishlistView.vue'; // 찜 리스트 페이지 추가
+import NowPlayingView from '../views/NowPlayingView.vue';
+import HomePage from '../views/HomePage.vue';
 
 // 라우트 정의
 const routes = [
@@ -14,6 +16,12 @@ const routes = [
   {
     path: '/',
     name: 'Home',
+    component: HomePage,
+    meta: { requiresAuth: true }, // 보호된 경로
+  },
+  {
+    path: '/popular',
+    name: 'PopularMovies',
     component: PopularMovies,
     meta: { requiresAuth: true }, // 보호된 경로
   },
@@ -21,6 +29,12 @@ const routes = [
     path: '/movie/:id',
     name: 'MovieDetail',
     component: MovieDetailView,
+    meta: { requiresAuth: true }, // 보호된 경로
+  },
+  {
+    path: '/now_playing',
+    name: 'nowplaying',
+    component: NowPlayingView,
     meta: { requiresAuth: true }, // 보호된 경로
   },
   {

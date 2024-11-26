@@ -54,7 +54,6 @@
       <div ref="observer" class="scroll-observer" v-if="loading">Loading...</div>
     </div>
 
-
     <!-- Top 버튼 -->
     <button @click="scrollToTop" class="top-button">Top</button>
   </div>
@@ -200,6 +199,17 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 20px;
+}
+
+.movie-item {
+  text-decoration: none; /* 기본 스타일 제거 */
+  color: inherit;
+  outline: none;
+}
+
+.movie-item:focus,
+.movie-item:active {
+  outline: none;
 }
 
 .scroll-observer {
