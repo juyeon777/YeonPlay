@@ -4,7 +4,7 @@
       <h1>YeonPlay</h1>
       <nav>
         <router-link to="/">홈</router-link>
-        <router-link to="/popular">대체 콘텐츠</router-link>
+        <router-link to="/popular">대세 콘텐츠</router-link>
         <router-link to="/now_playing">현재 상영 중인 영화</router-link> 
         <router-link to="/genres">장르별 영화</router-link>
         <router-link to="/wishlist">내가 찜한 콘텐츠</router-link>
@@ -122,7 +122,7 @@ header nav {
 
 header nav a {
   color: white;
-  text-decoration: none;
+  text-decoration: none; /* 밑줄 제거 */
   margin: 0 20px;
   font-size: 1.2rem;
   font-weight: 500;
@@ -134,8 +134,9 @@ header nav a:hover {
 }
 
 header nav a.router-link-exact-active {
-  color: #42b983;
-  text-decoration: underline;
+  color: #42b983; /* 선택된 탭 색상 */
+  text-decoration: none; /* 밑줄 제거 */
+  font-weight: bold; /* 강조를 원하면 추가 */
 }
 
 /* 로그인 상태 표시 스타일 */

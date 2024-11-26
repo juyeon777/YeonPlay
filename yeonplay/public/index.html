@@ -1,18 +1,36 @@
 <!DOCTYPE html>
 <html lang="ko">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
     <title>YeonPlay</title>
+
+    <!-- Google Fonts for sleek typography -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* 위의 CSS 삽입 */
+    </style>
   </head>
+
   <body>
     <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>YeonPlay는 JavaScript가 활성화되지 않으면 제대로 작동하지 않습니다. JavaScript를 활성화하세요.</strong>
     </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
+    <div id="app">
+      <h1 class="main-title">YeonPlay: 영화의 모든 것</h1>
+      <p class="subtitle">최고의 영화 경험을 지금 시작하세요!</p>
+
+      <!-- Loader -->
+      <div class="loader">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
   </body>
 </html>
-
