@@ -4,7 +4,6 @@
       <h1>YeonPlay</h1>
       <nav>
         <router-link to="/">대체 콘텐츠</router-link>
-        <router-link to="/now-playing">현재 상영 중인 영화</router-link>
         <router-link to="/genres">장르별 영화</router-link>
         <router-link to="/wishlist">내가 찜한 콘텐츠</router-link> 
         
@@ -35,7 +34,6 @@
     <main>
       <router-view />
     </main>
-
   </div>
 </template>
 

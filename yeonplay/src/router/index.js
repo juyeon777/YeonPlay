@@ -4,7 +4,6 @@ import MovieDetailView from '../views/MovieDetailView.vue'; // 상세 페이지
 import AboutView from '../views/AboutView.vue'; // About 페이지
 import MovieList from '../components/MovieList.vue';
 import MovieSearch from '../views/MovieSearch.vue'; // MovieSearch 임포트 추가
-import NowPlayingView from '../views/NowPlayingView.vue'; // NowPlayingView 추가
 import GenreFilterView from '../views/GenreFilterView.vue'; // 장르별 필터 추가
 import SignInView from '../views/SignIn.vue'; // 로그인/회원가입 페이지 추가
 import WishlistView from '../views/WishlistView.vue'; // 찜 리스트 페이지 추가
@@ -40,12 +39,6 @@ const routes = [
     path: '/search',
     name: 'SearchMovies',
     component: MovieSearch,
-    meta: { requiresAuth: true }, // 보호된 경로
-  },
-  {
-    path: '/now-playing',
-    name: 'NowPlaying',
-    component: NowPlayingView,
     meta: { requiresAuth: true }, // 보호된 경로
   },
   {
