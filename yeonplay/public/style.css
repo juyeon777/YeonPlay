@@ -1,0 +1,77 @@
+/* Google Fonts 적용 */
+body, html {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(180deg, #10141e 0%, #0f0f0f 100%);
+    color: #fff;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+  
+#app {
+    text-align: center;
+    padding: 20px;
+}
+  
+/* 메인 타이틀 */
+.main-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #42b983;
+    text-shadow: none; /* 번짐 효과 제거 */
+    margin-bottom: 20px;
+    animation: fadeIn 1s ease-in-out;
+}
+  
+/* 서브타이틀 */
+.subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+    color: #ddd;
+    text-shadow: none; /* 번짐 효과 제거 */
+}
+  
+/* 로딩 애니메이션 */
+.loader {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+  
+.loader div {
+    width: 15px;
+    height: 15px;
+    background-color: #42b983;
+    border-radius: 50%;
+    animation: bounce 1.5s infinite ease-in-out;
+}
+  
+.loader div:nth-child(1) {
+    animation-delay: 0s;
+}
+.loader div:nth-child(2) {
+    animation-delay: 0.3s;
+}
+.loader div:nth-child(3) {
+    animation-delay: 0.6s;
+}
+  
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+  
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
