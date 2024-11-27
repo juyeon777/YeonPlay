@@ -5,14 +5,18 @@ import AboutView from '../views/AboutView.vue'; // About 페이지
 import MovieList from '../components/MovieList.vue';
 import MovieSearch from '../views/MovieSearch.vue'; // MovieSearch 임포트 추가
 import GenreFilterView from '../views/GenreFilterView.vue'; // 장르별 필터 추가
-import SignInView from '../views/SignIn.vue'; // 로그인/회원가입 페이지 추가
+import SignInView from '../components/SignIn.vue'; // 로그인/회원가입 페이지 추가
 import WishlistView from '../views/WishlistView.vue'; // 찜 리스트 페이지 추가
 import NowPlayingView from '../views/NowPlayingView.vue';
 import HomePage from '../views/HomePage.vue';
 
 // 라우트 정의
 const routes = [
-  { path: '/signin', name: 'SignIn', component: SignInView }, // 로그인/회원가입 페이지
+  { path: '/signin',
+    name: 'SignIn',
+    component: SignInView
+
+  }, // 로그인/회원가입 페이지
   {
     path: '/',
     name: 'Home',

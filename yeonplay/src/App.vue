@@ -1,22 +1,19 @@
 <template>
   <div id="app">
-    <header>
+    <header v-if="isLoggedIn"> <!-- 로그인 상태일 때만 헤더 표시 -->
       <h1>YeonPlay</h1>
       <nav>
         <router-link to="/">홈</router-link>
         <router-link to="/popular">대세 콘텐츠</router-link>
-        <router-link to="/now_playing">현재 상영 중인 영화</router-link> 
+        <router-link to="/now_playing">현재 상영 중인 영화</router-link>
         <router-link to="/genres">장르별 영화</router-link>
         <router-link to="/wishlist">내가 찜한 콘텐츠</router-link>
 
-        
         <!-- 돋보기 아이콘 -->
         <div class="search-icon" @click="toggleSearch">🔍</div>
 
         <!-- 로그인 상태에 따른 UI -->
         <div class="user-info">
-
-
           <span v-if="isLoggedIn">{{ loggedInUser }}님</span>
           <router-link v-else to="/signin" class="login-link">로그인</router-link>
           <button v-if="isLoggedIn" @click="logout" class="logout-btn">로그아웃</button>
@@ -68,18 +65,16 @@ export default {
       // 로그아웃 처리
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('loggedInUser');
-      this.isLoggedIn = false;
-      this.loggedInUser = '';
+      this.checkLoginStatus(); //상태 갱신
+      alert('로그아웃되었습니다.');
       this.$router.push('/signin'); // 로그인 페이지로 이동
     },
     checkLoginStatus() {
       // 로컬 스토리지에서 로그인 상태 확인
       const isLoggedIn = localStorage.getItem('isLoggedIn');
       const loggedInUser = localStorage.getItem('loggedInUser');
-      if (isLoggedIn === 'true' && loggedInUser) {
-        this.isLoggedIn = true;
-        this.loggedInUser = loggedInUser;
-      }
+      this.isLoggedIn = isLoggedIn;
+      this.loggedInUser = isLoggedIn ? loggedInUser : '';
     },
   },
   created() {
@@ -218,20 +213,5 @@ main {
   min-height: calc(100vh - 140px);
   background-color: #ffffff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* 푸터 스타일 */
-footer {
-  background-color: #2c3e50;
-  color: white;
-  padding: 10px 0;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  font-size: 0.9rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
 }
 </style>
