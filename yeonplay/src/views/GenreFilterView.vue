@@ -1,6 +1,8 @@
 <template>
   <div class="genre-filter-view">
-    <h1 class="main-title">🎬 장르별 영화</h1>
+    <h1 :class="{ 'main-title': true, show: titleVisible }">
+      🎬 장르별 영화
+    </h1>
 
     <!-- 장르 선택 필터 -->
     <div class="filter-container">
@@ -47,6 +49,11 @@
   </div>
 </template>
 
+---
+
+### 스크립트
+
+```javascript
 <script>
 import tmdb from "@/api/tmdb";
 
@@ -58,11 +65,17 @@ export default {
       movies: [], // 필터링된 영화 데이터
       selectedGenre: "", // 선택된 장르 ID
       loading: true, // 로딩 상태
+      titleVisible: false, // 타이틀 애니메이션 상태
     };
   },
   async created() {
     await this.fetchGenres(); // 장르 목록 가져오기
     await this.fetchMovies(); // 모든 영화 가져오기
+  },
+  mounted() {
+    setTimeout(() => {
+      this.titleVisible = true; // 타이틀 애니메이션 활성화
+    }, 500); // 약간의 지연 후 애니메이션 실행
   },
   methods: {
     // 장르 목록 가져오기
@@ -110,16 +123,22 @@ export default {
   margin: 0 auto;
   padding: 20px;
   text-align: center;
-  background: #f8f9fa;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* 타이틀 스타일 */
 .main-title {
   font-size: 2.5rem;
   font-weight: bold;
   color: #42b983;
   margin-bottom: 30px;
+  opacity: 0; /* 초기 상태 */
+  transform: translateY(20px); /* 아래에서 위로 이동 */
+  transition: opacity 1.5s ease, transform 1.5s ease; /* 스르륵 효과 */
+}
+
+.main-title.show {
+  opacity: 1;
+  transform: translateY(0); /* 제자리로 이동 */
 }
 
 /* 필터 스타일 */

@@ -1,77 +1,132 @@
-/* Google Fonts 적용 */
+/* 기존 레이아웃 유지 */
 body, html {
     font-family: "Poppins", sans-serif;
     margin: 0;
     padding: 0;
     background: linear-gradient(180deg, #10141e 0%, #0f0f0f 100%);
     color: #fff;
-    overflow-x: hidden; /* Prevent horizontal scrolling */
-}
+  }
   
-#app {
+  #app {
     text-align: center;
-    padding: 20px;
-}
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden; /* 수평 스크롤 방지 */
+  }
   
-/* 메인 타이틀 */
-.main-title {
-    font-size: 2.5rem;
+  /* 스플래시 화면 스타일 */
+  /* 스플래시 화면 */
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 1s ease, visibility 0s 1s; /* 페이드 아웃 효과 */
+  }
+  
+  .splash-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  
+  .splash-logo {
+    font-size: 4rem;
     font-weight: 700;
     color: #42b983;
-    text-shadow: none; /* 번짐 효과 제거 */
-    margin-bottom: 20px;
-    animation: fadeIn 1s ease-in-out;
-}
+    letter-spacing: 5px;
+    animation: logoPop 1.5s ease-out 0.5s forwards;
+  }
   
-/* 서브타이틀 */
-.subtitle {
-    font-size: 1.2rem;
-    margin-bottom: 40px;
+  .splash-title {
+    font-size: 1.8rem;
+    font-weight: 600;
     color: #ddd;
-    text-shadow: none; /* 번짐 효과 제거 */
-}
+    margin-top: 10px;
+    opacity: 0;
+    animation: fadeIn 1.2s ease-out 2s forwards;
+  }
   
-/* 로딩 애니메이션 */
-.loader {
+  .loader {
     display: flex;
     justify-content: center;
     gap: 10px;
-}
+    margin-top: 20px;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 3s forwards;
+  }
   
-.loader div {
-    width: 15px;
-    height: 15px;
+  .loader div {
+    width: 12px;
+    height: 12px;
     background-color: #42b983;
     border-radius: 50%;
     animation: bounce 1.5s infinite ease-in-out;
-}
+  }
   
-.loader div:nth-child(1) {
+  .loader div:nth-child(1) {
     animation-delay: 0s;
-}
-.loader div:nth-child(2) {
-    animation-delay: 0.3s;
-}
-.loader div:nth-child(3) {
-    animation-delay: 0.6s;
-}
+  }
+  .loader div:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .loader div:nth-child(3) {
+    animation-delay: 0.4s;
+  }
   
-@keyframes bounce {
+  /* 애니메이션 */
+  @keyframes bounce {
     0%, 100% {
-        transform: translateY(0);
+      transform: translateY(0);
     }
     50% {
-        transform: translateY(-10px);
+      transform: translateY(-15px);
     }
-}
+  }
   
-@keyframes fadeIn {
+  @keyframes fadeIn {
     0% {
-        opacity: 0;
-        transform: translateY(10px);
+      opacity: 0;
+      transform: translateY(15px);
     }
     100% {
-        opacity: 1;
-        transform: translateY(0);
+      opacity: 1;
+      transform: translateY(0);
     }
-}
+  }
+  
+  @keyframes logoPop {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+      visibility: visible;
+    }
+    100% {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+  

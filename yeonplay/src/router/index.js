@@ -1,97 +1,105 @@
-import { createRouter, createWebHistory } from 'vue-router'; // Vue 3용 라우터 가져오기
-import PopularMovies from '../views/PopularMovies.vue'; // 메인 페이지
-import MovieDetailView from '../views/MovieDetailView.vue'; // 상세 페이지
-import AboutView from '../views/AboutView.vue'; // About 페이지
+import { createRouter, createWebHistory } from 'vue-router';
+import PopularMovies from '../views/PopularMovies.vue';
+import MovieDetailView from '../views/MovieDetailView.vue';
+import AboutView from '../views/AboutView.vue';
 import MovieList from '../components/MovieList.vue';
-import MovieSearch from '../views/MovieSearch.vue'; // MovieSearch 임포트 추가
-import GenreFilterView from '../views/GenreFilterView.vue'; // 장르별 필터 추가
-import SignInView from '../components/SignIn.vue'; // 로그인/회원가입 페이지 추가
-import WishlistView from '../views/WishlistView.vue'; // 찜 리스트 페이지 추가
+import MovieSearch from '../views/MovieSearch.vue';
+import GenreFilterView from '../views/GenreFilterView.vue';
+import SignInView from '../components/SignIn.vue';
+import WishlistView from '../views/WishlistView.vue';
 import NowPlayingView from '../views/NowPlayingView.vue';
 import HomePage from '../views/HomePage.vue';
 
 // 라우트 정의
 const routes = [
-  { path: '/signin',
+  {
+    path: '/signin',
     name: 'SignIn',
-    component: SignInView
-
-  }, // 로그인/회원가입 페이지
+    component: SignInView,
+  },
   {
     path: '/',
     name: 'Home',
     component: HomePage,
-    meta: { requiresAuth: true }, // 보호된 경로
+    meta: { requiresAuth: true },
   },
   {
     path: '/popular',
     name: 'PopularMovies',
     component: PopularMovies,
-    meta: { requiresAuth: true }, // 보호된 경로
+    meta: { requiresAuth: true },
   },
   {
     path: '/movie/:id',
     name: 'MovieDetail',
     component: MovieDetailView,
-    meta: { requiresAuth: true }, // 보호된 경로
+    meta: { requiresAuth: true },
   },
   {
     path: '/now_playing',
     name: 'nowplaying',
     component: NowPlayingView,
-    meta: { requiresAuth: true }, // 보호된 경로
+    meta: { requiresAuth: true },
   },
   {
     path: '/about',
     name: 'About',
     component: AboutView,
-    meta: { requiresAuth: true }, // 보호된 경로
+    meta: { requiresAuth: true },
   },
   {
     path: '/movielist',
     name: 'MovieList',
     component: MovieList,
-    meta: { requiresAuth: true }, // 보호된 경로
+    meta: { requiresAuth: true },
   },
   {
     path: '/search',
     name: 'SearchMovies',
     component: MovieSearch,
-    meta: { requiresAuth: true }, // 보호된 경로
+    meta: { requiresAuth: true },
   },
   {
     path: '/genres',
     name: 'GenreFilter',
     component: GenreFilterView,
-    meta: { requiresAuth: true }, // 보호된 경로
+    meta: { requiresAuth: true },
   },
   {
     path: '/wishlist',
     name: 'Wishlist',
-    component: WishlistView, // 찜 리스트 라우트 추가
-    meta: { requiresAuth: true }, // 보호된 경로
+    component: WishlistView,
+    meta: { requiresAuth: true },
   },
 ];
 
 // 라우터 생성
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL), // 히스토리 모드 설정
+  history: createWebHistory(process.env.BASE_URL),
   routes,
 });
 
 // 전역 가드: 로그인이 필요한 경로 보호
 router.beforeEach((to, from, next) => {
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'; // 로컬 스토리지로 로그인 상태 확인
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'; // 로그인 여부 확인
+  const splashScreen = document.querySelector("#splash-screen"); // 스플래시 화면 요소
 
-  // 로그인 상태가 필요한 경우
+  // 스플래시 화면이 있으면 제거
+  if (splashScreen) {
+    splashScreen.style.opacity = "0";
+    splashScreen.style.visibility = "hidden";
+  }
+
+  // 인증이 필요한 경로 접근 시
   if (to.meta.requiresAuth && !isLoggedIn) {
     alert('로그인이 필요합니다.');
-    next({ name: 'SignIn' }); // 로그인 페이지로 리다이렉트
+    next({ name: 'SignIn' });
   } else if (to.name === 'SignIn' && isLoggedIn) {
-    // 이미 로그인된 상태에서 로그인/회원가입 페이지로 접근 시 메인으로 리다이렉트
+    // 이미 로그인된 상태에서 로그인/회원가입 페이지 접근 시 메인으로 리다이렉트
     next({ name: 'Home' });
   } else {
-    next(); // 조건 충족 시 이동
+    // 모든 조건을 충족한 경우 이동
+    next();
   }
 });
 

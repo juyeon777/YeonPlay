@@ -1,7 +1,7 @@
 <template>
   <div class="popular-movies">
     <!-- 페이지 타이틀 -->
-    <h1 class="main-title">🔥 대세 콘텐츠</h1>
+    <h1 :class="{ 'main-title': true, show: titleVisible }">🔥 대세 콘텐츠</h1>
 
     <!-- Top 3 영화 섹션 -->
     <section class="top-movies">
@@ -42,6 +42,11 @@
   </div>
 </template>
 
+---
+
+### 스크립트
+
+```javascript
 <script>
 import tmdb from "@/api/tmdb";
 
@@ -53,6 +58,7 @@ export default {
       topMovies: [], // Top 3 영화
       otherMovies: [], // 나머지 영화
       loading: false, // 로딩 상태
+      titleVisible: false, // 타이틀 애니메이션 여부
     };
   },
   methods: {
@@ -87,6 +93,12 @@ export default {
   async created() {
     await this.fetchMovies(); // 컴포넌트 생성 시 데이터 로드
   },
+  mounted() {
+    // 타이틀 애니메이션 활성화
+    setTimeout(() => {
+      this.titleVisible = true;
+    }, 500); // 0.5초 후 타이틀 표시
+  },
 };
 </script>
 
@@ -105,6 +117,14 @@ export default {
   color: #ff5722; /* 대세 콘텐츠에 맞는 강렬한 색상 */
   margin-bottom: 30px;
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  opacity: 0; /* 초기 상태 */
+  transform: translateY(20px); /* 초기 상태 */
+  transition: opacity 1.5s ease, transform 1.5s ease; /* 스르륵 효과 */
+}
+
+.main-title.show {
+  opacity: 1;
+  transform: translateY(0); /* 제자리로 이동 */
 }
 
 /* Top 3 영화 섹션 */

@@ -1,7 +1,9 @@
 <template>
   <div class="wishlist-container">
-    <h1 class="main-title">🎥 내가 찜한 콘텐츠</h1>
-
+    <!-- 타이틀 -->
+    <h1 :class="{ 'main-title': true, show: titleVisible }">
+      🎥 내가 찜한 콘텐츠
+    </h1>
     <!-- 찜한 콘텐츠가 없을 경우 -->
     <div v-if="wishlist.length === 0" class="empty-message">
       <p>찜한 콘텐츠가 없습니다.</p>
@@ -34,6 +36,7 @@ export default {
   data() {
     return {
       wishlist: [], // 찜한 영화 데이터
+      titleVisible: false, // 타이틀 표시 여부
     };
   },
   methods: {
@@ -49,8 +52,11 @@ export default {
       alert("찜한 콘텐츠가 삭제되었습니다.");
     },
   },
-  created() {
-    this.loadWishlist(); // 컴포넌트 생성 시 찜 리스트 로드
+  mounted() {
+    this.loadWishlist();
+    setTimeout(() => {
+      this.titleVisible = true; // 타이틀 표시
+    }, 500); // 0.5초 후 타이틀 표시
   },
 };
 </script>
@@ -64,11 +70,20 @@ export default {
   text-align: center;
 }
 
+/* 타이틀 애니메이션 */
 .main-title {
   font-size: 2.5rem;
   font-weight: bold;
   color: #42b983;
   margin-bottom: 30px;
+  opacity: 0; /* 초기 상태 */
+  transform: translateY(20px); /* 초기 상태 */
+  transition: opacity 1.5s ease, transform 1.5s ease; /* 스르륵 효과 */
+}
+
+.main-title.show {
+  opacity: 1;
+  transform: translateY(0); /* 제자리로 이동 */
 }
 
 /* 찜한 콘텐츠가 없을 때 메시지 */

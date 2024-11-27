@@ -22,9 +22,11 @@
     </noscript>
     <div id="app">
       <div class="splash-screen">
+        <!-- 로고 애니메이션 -->
+        <div class="splash-logo">YeonPlay</div> <!-- 넷플릭스의 N처럼 중심 로고 -->
         <h1 class="main-title">YeonPlay: 영화의 모든 것</h1>
         <p class="subtitle">최고의 영화 경험을 지금 시작하세요!</p>
-        <!-- Loader -->
+        <!-- 로딩 애니메이션 -->
         <div class="loader">
           <div></div>
           <div></div>
@@ -32,5 +34,17 @@
         </div>
       </div>
     </div>
+    <script>
+      // DOMContentLoaded로 초기화
+      document.addEventListener("DOMContentLoaded", () => {
+        const splashScreen = document.querySelector("#splash-screen");
+        if (splashScreen) {
+          setTimeout(() => {
+            splashScreen.style.opacity = "0"; // 페이드 아웃
+            splashScreen.style.visibility = "hidden"; // 완전히 숨기기
+          }, 5000); // 5초 유지
+        }
+      });
+    </script>
   </body>
 </html>

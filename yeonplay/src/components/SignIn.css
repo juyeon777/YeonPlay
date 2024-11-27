@@ -1,0 +1,97 @@
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f9;
+  }
+  
+  .auth-card {
+    width: 400px;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .input-group {
+    margin-bottom: 15px;
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  input.focused {
+    border-color: #42b983;
+  }
+  
+  .checkbox-group {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+  }
+  
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #42b983;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    background-color: #ccc;
+  }
+  
+  .switch-form {
+    text-align: center;
+    margin-top: 15px;
+  }
+  
+  .switch-form span {
+    color: #42b983;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  /* 애니메이션 */
+  .slide-left-enter-active,
+  .slide-right-enter-active,
+  .slide-fade-enter-active {
+    transition: transform 0.6s, opacity 0.6s;
+  }
+  
+  .slide-left-enter-from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  
+  .slide-right-enter-from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  
+  .slide-fade-enter-from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  
+  .slide-fade-leave-active {
+    opacity: 0;
+    transform: scale(1.1);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  
