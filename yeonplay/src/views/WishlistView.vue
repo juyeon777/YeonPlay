@@ -74,7 +74,7 @@ export default {
 .main-title {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #42b983;
+  color: #ffd700;
   margin-bottom: 30px;
   opacity: 0; /* 초기 상태 */
   transform: translateY(20px); /* 초기 상태 */

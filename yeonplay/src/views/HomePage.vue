@@ -1,7 +1,11 @@
 <template>
   <div class="homepage">
-    <!-- 타이틀 -->
-    <h1 :class="{ 'main-title': true, show: titleVisible }">
+
+    <!-- 메인 타이틀 -->
+    <h1
+      :key="'main-title'" 
+      :class="{ 'main-title': true, show: titleVisible }"
+    >
       🎬 YeonPlay: 영화의 모든 것
     </h1>
 
@@ -95,7 +99,7 @@ export default {
       topRatedMovies: [],
       upcomingMovies: [],
       slideInterval: null,
-      titleVisible: false, // 타이틀 표시 여부
+      titleVisible: false,
     };
   },
   methods: {
@@ -132,7 +136,6 @@ export default {
     },
     startCarousel() {
       const carousel = this.$refs.carousel;
-
       let scrollPosition = 0;
 
       this.slideInterval = setInterval(() => {
@@ -161,43 +164,48 @@ export default {
     await this.fetchMovies();
   },
   mounted() {
-    this.startCarousel();
-
-    // 타이틀 애니메이션 활성화
     setTimeout(() => {
       this.titleVisible = true;
-    }, 500); // 약간의 지연 후 실행
+    }, 500);
+    this.startCarousel();
   },
   beforeUnmount() {
     this.stopCarousel();
+    this.titleVisible = false;
+
   },
 };
 </script>
 
 <style scoped>
-/* 기본 레이아웃 */
+/* 전체 레이아웃 */
 .homepage {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  background-color: #121212;
+  color: #ffffff;
 }
 
+/* 메인 타이틀 */
 .main-title {
   text-align: center;
-  font-size: 2.8rem;
+  font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 40px;
-  color: #42b983;
+  color: #3b82f6;
+  text-shadow: 0 0 10px #3b82f6, 0 0 20px #3b82f6, 0 0 30px #3b82f6; /* 네온 효과 */
   opacity: 0;
-  transform: translateY(20px); /* 초기 상태 */
-  transition: opacity 1.5s ease, transform 1.5s ease; /* 스르륵 효과 */
+  transform: translateY(20px);
+  transition: opacity 1.5s ease, transform 1.5s ease;
 }
 
 .main-title.show {
   opacity: 1;
-  transform: translateY(0); /* 제자리로 이동 */
+  transform: translateY(0);
 }
 
+/* 영화 섹션 */
 .movie-section {
   margin-bottom: 50px;
 }
@@ -206,7 +214,7 @@ export default {
   font-size: 1.8rem;
   font-weight: bold;
   margin-bottom: 20px;
-  color: #2c3e50;
+  color: #ffffff; /* 섹션 타이틀을 흰색으로 */
 }
 
 /* 캐러셀 */

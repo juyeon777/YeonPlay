@@ -1,81 +1,62 @@
 <template>
   <div class="auth-container">
-    <div class="auth-card" :class="{ 'rotate-card': !isLoginVisible }">
-      <!-- 로그인 폼 -->
-      <div class="form-container login-form" v-if="isLoginVisible">
-        <h2>로그인</h2>
-        <div class="input-group">
-          <input
-            type="email"
-            v-model="loginForm.email"
-            placeholder="이메일"
-            required
-          />
-        </div>
-        <div class="input-group">
-          <input
-            type="password"
-            v-model="loginForm.password"
-            placeholder="비밀번호"
-            required
-          />
-        </div>
-        <div class="checkbox-group">
-          <label>
-            <input type="checkbox" v-model="loginForm.rememberMe" />
-            <span>Remember me</span>
-          </label>
-        </div>
-        <button @click="handleLogin" :disabled="!isLoginFormValid">
-          로그인
-        </button>
-        <p class="switch-form">
-          계정이 없으신가요?
-          <span @click="toggleCard">회원가입</span>
-        </p>
+    <!-- 로그인 및 회원가입 카드 -->
+    <div class="auth-card">
+      <!-- 로고 -->
+      <div class="auth-logo">
+        <h1>YeonPlay</h1>
       </div>
+      <transition name="slide" mode="out-in">
+        <!-- 로그인 폼 -->
+        <form v-if="isLoginVisible" @submit.prevent="handleLogin" key="login">
+          <h2 class="form-title">로그인</h2>
+          <div class="input-group">
+            <input type="email" v-model="loginForm.email" placeholder="이메일" required />
+          </div>
+          <div class="input-group">
+            <input type="password" v-model="loginForm.password" placeholder="비밀번호" required />
+          </div>
+          <div class="checkbox-group">
+            <label>
+              <input type="checkbox" v-model="loginForm.rememberMe" />
+              <span>Remember me</span>
+            </label>
+          </div>
+          <button type="submit" :disabled="!isLoginFormValid" class="form-btn">로그인</button>
+          <p class="switch-form">
+            계정이 없으신가요? <span @click="toggleCard">회원가입</span>
+          </p>
+        </form>
 
-      <!-- 회원가입 폼 -->
-      <div class="form-container register-form" v-else>
-        <h2>회원가입</h2>
-        <div class="input-group">
-          <input
-            type="email"
-            v-model="registerForm.email"
-            placeholder="이메일"
-            required
-          />
-        </div>
-        <div class="input-group">
-          <input
-            type="password"
-            v-model="registerForm.password"
-            placeholder="비밀번호"
-            required
-          />
-        </div>
-        <div class="input-group">
-          <input
-            type="password"
-            v-model="registerForm.confirmPassword"
-            placeholder="비밀번호 확인"
-            required
-          />
-        </div>
-        <div class="checkbox-group">
-          <label>
-            <input type="checkbox" v-model="registerForm.acceptTerms" />
-            <span>약관에 동의합니다</span>
-          </label>
-        </div>
-        <button @click="handleRegister" :disabled="!isRegisterFormValid">
-          회원가입
-        </button>
-        <p class="switch-form">
-          이미 계정이 있으신가요?
-          <span @click="toggleCard">로그인</span>
-        </p>
-      </div>
+        <!-- 회원가입 폼 -->
+        <form v-else @submit.prevent="handleRegister" key="register">
+          <h2 class="form-title">회원가입</h2>
+          <div class="input-group">
+            <input type="email" v-model="registerForm.email" placeholder="이메일" required />
+          </div>
+          <div class="input-group">
+            <input type="password" v-model="registerForm.password" placeholder="비밀번호" required />
+          </div>
+          <div class="input-group">
+            <input
+              type="password"
+              v-model="registerForm.confirmPassword"
+              placeholder="비밀번호 확인"
+              required
+            />
+          </div>
+          <div class="checkbox-group">
+            <label>
+              <input type="checkbox" v-model="registerForm.acceptTerms" />
+              <span>약관에 동의합니다</span>
+            </label>
+          </div>
+          <button type="submit" :disabled="!isRegisterFormValid" class="form-btn">회원가입</button>
+          <p class="switch-form">
+            이미 계정이 있으신가요? <span @click="toggleCard">로그인</span>
+          </p>
+        </form>
+      </transition>
     </div>
   </div>
 </template>
@@ -85,7 +66,7 @@ export default {
   name: "SignIn",
   data() {
     return {
-      isLoginVisible: true, // 로그인/회원가입 전환 상태
+      isLoginVisible: true,
       loginForm: {
         email: "",
         password: "",
@@ -107,7 +88,6 @@ export default {
       return (
         !!this.registerForm.email &&
         !!this.registerForm.password &&
-        !!this.registerForm.confirmPassword &&
         this.registerForm.password === this.registerForm.confirmPassword &&
         this.registerForm.acceptTerms
       );
@@ -118,98 +98,87 @@ export default {
       this.isLoginVisible = !this.isLoginVisible;
     },
     handleLogin() {
-        const storedEmail = localStorage.getItem("userEmail");
-        const storedPassword = localStorage.getItem("userPassword");
+      const { email, password } = this.loginForm;
 
-        if (
-            this.loginForm.email === storedEmail &&
-            this.loginForm.password === storedPassword
-        ) {
-            // Remember me 옵션 저장
-            if (this.loginForm.rememberMe) {
-                localStorage.setItem("rememberMe", "true");
-            }
-            // 로그인 상태 저장
-            localStorage.setItem("isLoggedIn", "true");
-            localStorage.setItem("loggedInUser", this.loginForm.email);
+      // 로컬 스토리지에 저장된 사용자 정보 가져오기
+      const storedEmail = localStorage.getItem("userEmail");
+      const storedPassword = localStorage.getItem("userPassword");
 
-            alert("로그인 성공!");
+      if (email === storedEmail && password === storedPassword) {
+        // 로그인 성공
+        localStorage.setItem("isLoggedIn", "true"); // 로그인 상태 저장
+        alert("로그인 성공!");
 
-            // 부모 컴포넌트(App.vue)로 상태 갱신 이벤트 전달
-            this.$emit("login-success");
-            this.$router.push("/"); // 메인 페이지로 이동
-        } else {
-            alert("이메일 또는 비밀번호가 일치하지 않습니다.");
-        }
+        // 홈 페이지로 이동
+        this.$router.push({ name: "Home" }); // "Home"은 라우터에서 정의된 경로 이름
+      } else {
+        alert("이메일 또는 비밀번호가 일치하지 않습니다.");
+      }
     },
-
     handleRegister() {
-      alert("회원가입 완료!");
-      this.toggleCard(); // 로그인 화면으로 전환
+      const { email, password } = this.registerForm;
+
+      // 사용자 정보를 로컬 스토리지에 저장
+      localStorage.setItem("userEmail", email);
+      localStorage.setItem("userPassword", password);
+      localStorage.setItem("isLoggedIn", "false"); // 기본값은 로그인되지 않음
+
+      alert("회원가입 성공!");
+      this.toggleCard(); // 회원가입 완료 후 로그인 화면으로 전환
     },
   },
 };
 </script>
 
 <style scoped>
-/* 기본 컨테이너 */
+/* 전체 배경 */
 .auth-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #74ebd5, #acb6e5);
-  overflow: hidden;
+  background: linear-gradient(135deg, #1e1e1e, #121212);
+  color: #e5e7eb;
 }
 
-/* 카드 스타일 */
+/* 카드 */
 .auth-card {
   width: 400px;
-  height: 500px;
-  background: white;
+  padding: 60px 30px 30px; /* 로고 공간 확보 */
+  background: #1f2937;
   border-radius: 10px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+  text-align: center;
   position: relative;
-  transform-style: preserve-3d;
-  transform-origin: center;
-  transition: transform 0.8s ease-in-out;
 }
 
-.auth-card.rotate-card {
-  transform: rotateY(180deg);
-}
-
-/* 폼 공통 스타일 */
-.form-container {
+/* 로고 */
+.auth-logo {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  box-sizing: border-box;
+  top: -50px; /* 더 위로 이동 */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f2937;
+  padding: 10px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-.login-form {
-  transform: rotateY(0deg);
+.auth-logo h1 {
+  font-size: 2.5rem;
+  color: #3b82f6;
+  text-shadow: 0 0 10px #3b82f6, 0 0 20px #3b82f6;
 }
 
-.register-form {
-  transform: rotateY(180deg);
+/* 제목 */
+.form-title {
+  margin-top: 50px; /* 로고와 간격 확보 */
+  font-size: 1.5rem;
+  color: #ffffff; /* 하얀색 */
 }
 
-/* 폼 요소 스타일 */
-h2 {
-  margin-bottom: 20px;
-  font-size: 1.8rem;
-  color: #333;
-}
-
+/* 입력 필드 */
 .input-group {
-  width: 100%;
   margin-bottom: 15px;
 }
 
@@ -218,71 +187,77 @@ input {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  font-size: 14px;
-  box-sizing: border-box;
+  background: #2d3748;
+  color: #e5e7eb;
 }
 
-button {
+input::placeholder {
+  color: #9ca3af;
+}
+
+input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 5px #3b82f6;
+}
+
+/* 버튼 */
+.form-btn {
   width: 100%;
   padding: 10px;
-  background-color: #42b983;
-  color: white;
+  background-color: #3b82f6;
   border: none;
+  color: white;
   font-size: 16px;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-button:disabled {
-  background-color: #ccc;
+.form-btn:disabled {
+  background-color: #4b5563;
   cursor: not-allowed;
 }
 
-button:hover:enabled {
-  background-color: #369d6c;
+.form-btn:hover:enabled {
+  background-color: #2563eb;
 }
 
+/* 전환 텍스트 */
 .switch-form {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #555;
+  text-align: center;
+  margin-top: 15px;
 }
 
 .switch-form span {
-  color: #42b983;
+  color: #3b82f6;
   cursor: pointer;
-  font-weight: bold;
+  text-decoration: underline;
 }
 
-/* 체크박스 그룹 스타일 */
+/* 체크박스 */
 .checkbox-group {
-  width: 100%;
+  margin-bottom: 15px;
   display: flex;
   align-items: center;
-  gap: 8px; /* 텍스트와 체크박스 간의 간격 */
+  gap: 8px;
   font-size: 14px;
+  color: #e5e7eb;
 }
 
-/* 체크박스 크기 조정 */
-.checkbox-group input[type="checkbox"] {
-  width: 18px; /* 체크박스 크기 */
-  height: 18px;
-  cursor: pointer;
-  accent-color: #42b983; /* 체크박스 색상 */
+/* 전환 애니메이션 */
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.6s ease;
 }
 
-/* 체크박스 레이블 */
-.checkbox-group span {
-  color: #555;
+.slide-enter-from {
+  transform: translateX(100%);
+  opacity: 0;
 }
 
-
-/* 반응형 */
-@media (max-width: 480px) {
-  .auth-card {
-    width: 90%;
-    height: 450px;
-  }
+.slide-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
 }
 </style>

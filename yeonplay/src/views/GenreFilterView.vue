@@ -129,7 +129,7 @@ export default {
 .main-title {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #42b983;
+  color: #a259ff;
   margin-bottom: 30px;
   opacity: 0; /* 초기 상태 */
   transform: translateY(20px); /* 아래에서 위로 이동 */
@@ -153,7 +153,7 @@ export default {
 .filter-label {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #333;
+  color: #ffffff;
 }
 
 .filter-select {
