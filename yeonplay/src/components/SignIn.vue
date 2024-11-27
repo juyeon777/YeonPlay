@@ -32,6 +32,9 @@
         <form v-else @submit.prevent="handleRegister" key="register">
           <h2 class="form-title">회원가입</h2>
           <div class="input-group">
+            <input type="text" v-model="registerForm.nickname" placeholder="닉네임" required />
+          </div>
+          <div class="input-group">
             <input type="email" v-model="registerForm.email" placeholder="이메일" required />
           </div>
           <div class="input-group">
@@ -73,6 +76,7 @@ export default {
         rememberMe: false,
       },
       registerForm: {
+        nickname: "", // 닉네임 추가
         email: "",
         password: "",
         confirmPassword: "",
@@ -86,6 +90,7 @@ export default {
     },
     isRegisterFormValid() {
       return (
+        !!this.registerForm.nickname && // 닉네임 입력 여부 확인
         !!this.registerForm.email &&
         !!this.registerForm.password &&
         this.registerForm.password === this.registerForm.confirmPassword &&
@@ -103,10 +108,13 @@ export default {
       // 로컬 스토리지에 저장된 사용자 정보 가져오기
       const storedEmail = localStorage.getItem("userEmail");
       const storedPassword = localStorage.getItem("userPassword");
+      const storedNickname = localStorage.getItem("userNickname"); // 닉네임 가져오기
 
       if (email === storedEmail && password === storedPassword) {
         // 로그인 성공
         localStorage.setItem("isLoggedIn", "true"); // 로그인 상태 저장
+        localStorage.setItem("loggedInUser", storedNickname); // 닉네임을 로그인 사용자로 설정
+
         alert("로그인 성공!");
 
         // 홈 페이지로 이동
@@ -116,9 +124,10 @@ export default {
       }
     },
     handleRegister() {
-      const { email, password } = this.registerForm;
+      const { nickname, email, password } = this.registerForm;
 
       // 사용자 정보를 로컬 스토리지에 저장
+      localStorage.setItem("userNickname", nickname); // 닉네임 저장
       localStorage.setItem("userEmail", email);
       localStorage.setItem("userPassword", password);
       localStorage.setItem("isLoggedIn", "false"); // 기본값은 로그인되지 않음
@@ -129,6 +138,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 /* 전체 배경 */

@@ -1,20 +1,17 @@
 <template>
   <div id="app">
-    <!-- 헤더: 특정 경로에서는 숨김 -->
-    <header v-if="showHeader">
+    <!-- 헤더 -->
+    <header v-if="isLoggedIn">
       <div class="header-top">
-        <!-- 로고 -->
         <div class="logo">
           <h1>YeonPlay</h1>
         </div>
-        <!-- 사용자 정보 -->
         <div class="user-info">
-          <span v-if="isLoggedIn">{{ loggedInUser }}님</span>
-          <router-link v-else to="/signin" class="login-link">로그인</router-link>
+          <!-- 로그인 상태에 따라 닉네임 표시 -->
+          <span>{{ loggedInUser }}님</span>
           <button v-if="isLoggedIn" @click="logout" class="logout-btn">로그아웃</button>
         </div>
       </div>
-      <!-- 메뉴와 검색 -->
       <div class="header-bottom">
         <nav>
           <router-link to="/">홈</router-link>
@@ -23,15 +20,14 @@
           <router-link to="/genres">장르별 영화</router-link>
           <router-link to="/wishlist">내가 찜한 콘텐츠</router-link>
         </nav>
-        <!-- 검색 필드 -->
         <div class="search-container">
           <input
             type="text"
             v-model="searchQuery"
-            placeholder="Search movies..."
+            placeholder="영화 제목을 입력하세요."
             @keyup.enter="performSearch"
           />
-          <button @click="performSearch">Go</button>
+          <button @click="performSearch">검색!</button>
         </div>
       </div>
     </header>
@@ -45,43 +41,45 @@
 export default {
   data() {
     return {
-      searchQuery: '', // 검색어
-      isLoggedIn: false, // 로그인 상태
-      loggedInUser: '', // 로그인된 사용자 닉네임
+      searchQuery: "",
+      isLoggedIn: false,
+      loggedInUser: "", // 닉네임을 표시하기 위한 변수
     };
-  },
-  computed: {
-    // 현재 경로의 메타 정보를 기반으로 헤더 표시 여부 결정
-    showHeader() {
-      return !this.$route.meta.hideHeader;
-    },
   },
   methods: {
     performSearch() {
       if (this.searchQuery.trim()) {
-        this.$router.push({ name: 'SearchMovies', query: { q: this.searchQuery } });
-        this.searchQuery = ''; // 검색어 초기화
+        this.$router.push({ name: "SearchMovies", query: { q: this.searchQuery } });
+        this.searchQuery = "";
       } else {
-        alert('검색어를 입력해주세요.');
+        alert("검색어를 입력해주세요.");
       }
     },
     logout() {
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('loggedInUser');
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("loggedInUser");
       this.isLoggedIn = false;
-      alert('로그아웃되었습니다.');
-      this.$router.push('/signin');
+      this.loggedInUser = "";
+      alert("로그아웃되었습니다.");
+      this.$router.push("/signin");
     },
     checkLoginStatus() {
-      this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-      this.loggedInUser = localStorage.getItem('loggedInUser') || '';
+      this.isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+      this.loggedInUser = localStorage.getItem("loggedInUser") || ""; // 닉네임 가져오기
+      console.log("로그인 상태:", this.isLoggedIn, "닉네임:", this.loggedInUser);
     },
   },
   created() {
     this.checkLoginStatus();
   },
+  watch: {
+    $route() {
+      this.checkLoginStatus();
+    },
+  },
 };
 </script>
+
 
 <style>
 /* 기본 스타일 */
@@ -156,12 +154,12 @@ nav a {
 }
 
 nav a:hover {
-  color: #42b983;
+  color: #1E90FF;
 }
 
 nav a.router-link-exact-active {
   font-weight: bold;
-  color: #42b983;
+  color: #1E90FF;
 }
 
 /* 검색 필드 스타일 */
@@ -189,7 +187,7 @@ nav a.router-link-exact-active {
 }
 
 .search-container button:hover {
-  background-color: #369d6c;
+  background-color: #1E90FF;
 }
 
 /* 반응형 처리 */
