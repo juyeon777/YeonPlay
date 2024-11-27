@@ -52,12 +52,16 @@ jobs:
           node-version: '16'
       - name: Install Dependencies
         run: npm install
-      - name: Run Placeholder Test
-        run: echo "Skipping tests as they are not configured." # 테스트 생략
       - name: Build Project
         env:
           NODE_ENV: production
         run: npm run build
+      - name: Verify Build Output
+        run: |
+          if [ ! -d "./dist" ]; then
+            echo "⚠️ Build output (dist directory) not found. Ensure the build step runs correctly."
+            exit 1
+          fi
 
   deploy-main:
     name: Deploy to Production (main)
