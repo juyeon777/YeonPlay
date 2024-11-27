@@ -118,9 +118,31 @@ export default {
       this.isLoginVisible = !this.isLoginVisible;
     },
     handleLogin() {
-      alert("로그인 성공!"); // 예시
-      this.$router.push("/");
+        const storedEmail = localStorage.getItem("userEmail");
+        const storedPassword = localStorage.getItem("userPassword");
+
+        if (
+            this.loginForm.email === storedEmail &&
+            this.loginForm.password === storedPassword
+        ) {
+            // Remember me 옵션 저장
+            if (this.loginForm.rememberMe) {
+                localStorage.setItem("rememberMe", "true");
+            }
+            // 로그인 상태 저장
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("loggedInUser", this.loginForm.email);
+
+            alert("로그인 성공!");
+
+            // 부모 컴포넌트(App.vue)로 상태 갱신 이벤트 전달
+            this.$emit("login-success");
+            this.$router.push("/"); // 메인 페이지로 이동
+        } else {
+            alert("이메일 또는 비밀번호가 일치하지 않습니다.");
+        }
     },
+
     handleRegister() {
       alert("회원가입 완료!");
       this.toggleCard(); // 로그인 화면으로 전환

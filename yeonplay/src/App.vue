@@ -19,7 +19,6 @@
           <button v-if="isLoggedIn" @click="logout" class="logout-btn">로그아웃</button>
         </div>
       </nav>
-
       <!-- 검색 필드 -->
       <div v-if="showSearchInput" class="search-container">
         <input
@@ -32,7 +31,7 @@
       </div>
     </header>
     <main>
-      <router-view />
+      <router-view @login-success="checkLoginStatus" />
     </main>
   </div>
 </template>
@@ -65,7 +64,9 @@ export default {
       // 로그아웃 처리
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('loggedInUser');
-      this.checkLoginStatus(); //상태 갱신
+      this.isLoggedIn = false;
+      this.loggedInUser = "";
+      
       alert('로그아웃되었습니다.');
       this.$router.push('/signin'); // 로그인 페이지로 이동
     },
@@ -74,7 +75,7 @@ export default {
       const isLoggedIn = localStorage.getItem('isLoggedIn');
       const loggedInUser = localStorage.getItem('loggedInUser');
       this.isLoggedIn = isLoggedIn;
-      this.loggedInUser = isLoggedIn ? loggedInUser : '';
+      this.loggedInUser = loggedInUser || '';
     },
   },
   created() {
