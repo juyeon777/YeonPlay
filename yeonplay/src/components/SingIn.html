@@ -1,4 +1,5 @@
-<div class="auth-container">
+<template>
+  <div class="auth-container">
     <div class="auth-card">
       <!-- 로그인 및 회원가입 폼 전환 애니메이션 -->
       <transition :name="transitionName" mode="out-in">
@@ -39,7 +40,7 @@
             <span @click="toggleCard">회원가입</span>
           </p>
         </form>
-  
+
         <!-- 회원가입 폼 -->
         <form v-else @submit.prevent="handleRegister" key="register">
           <h2>회원가입</h2>
@@ -91,4 +92,4 @@
       </transition>
     </div>
   </div>
-  
+</template>

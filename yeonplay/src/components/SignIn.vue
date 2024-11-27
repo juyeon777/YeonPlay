@@ -255,14 +255,28 @@ button:hover:enabled {
   font-weight: bold;
 }
 
-/* 체크박스 */
+/* 체크박스 그룹 스타일 */
 .checkbox-group {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 8px; /* 텍스트와 체크박스 간의 간격 */
   font-size: 14px;
 }
+
+/* 체크박스 크기 조정 */
+.checkbox-group input[type="checkbox"] {
+  width: 18px; /* 체크박스 크기 */
+  height: 18px;
+  cursor: pointer;
+  accent-color: #42b983; /* 체크박스 색상 */
+}
+
+/* 체크박스 레이블 */
+.checkbox-group span {
+  color: #555;
+}
+
 
 /* 반응형 */
 @media (max-width: 480px) {

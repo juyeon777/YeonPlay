@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <header>
+    <!-- 헤더: 특정 경로에서는 숨김 -->
+    <header v-if="showHeader">
       <div class="header-top">
         <!-- 로고 -->
         <div class="logo">
@@ -40,21 +41,22 @@
   </div>
 </template>
 
-
 <script>
 export default {
   data() {
     return {
-      showSearchInput: false, // 검색 입력 필드 표시 여부
       searchQuery: '', // 검색어
       isLoggedIn: false, // 로그인 상태
       loggedInUser: '', // 로그인된 사용자 닉네임
     };
   },
-  methods: {
-    toggleSearch() {
-      this.showSearchInput = !this.showSearchInput;
+  computed: {
+    // 현재 경로의 메타 정보를 기반으로 헤더 표시 여부 결정
+    showHeader() {
+      return !this.$route.meta.hideHeader;
     },
+  },
+  methods: {
     performSearch() {
       if (this.searchQuery.trim()) {
         this.$router.push({ name: 'SearchMovies', query: { q: this.searchQuery } });
@@ -71,7 +73,7 @@ export default {
       this.$router.push('/signin');
     },
     checkLoginStatus() {
-      this.isLoggedIn = localStorage.getItem('isLoggedIn');
+      this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
       this.loggedInUser = localStorage.getItem('loggedInUser') || '';
     },
   },
@@ -80,7 +82,6 @@ export default {
   },
 };
 </script>
-
 
 <style>
 /* 기본 스타일 */

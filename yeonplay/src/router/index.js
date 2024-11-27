@@ -16,6 +16,7 @@ const routes = [
     path: '/signin',
     name: 'SignIn',
     component: SignInView,
+    meta: { hideHeader: true }, // 헤더 숨김 설정
   },
   {
     path: '/',
